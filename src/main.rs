@@ -1,7 +1,11 @@
 use std::fmt;
+use std::cmp;
 
 mod bitscan;
 use bitscan::*;
+
+mod helper;
+mod occupancy_masks;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Type {
@@ -137,14 +141,24 @@ impl fmt::Display for Board {
     }
 }
 
-fn main() {
-    for i in 0..64 {
-        println!("{}", bitscan(1 << i));
+fn print_mask(mask: u64) {
+    // A1 (bottom left, from whites perspective) is the LSB,
+    // so we need to reverse both x and y directions
+    for i in (0..8).rev() {
+        let row = (mask >> (8 * i)) & 0xff;
+
+        // See: http://graphics.stanford.edu/~seander/bithacks.html
+        let row_rev = (row * 0x0202020202 & 0x010884422010) % 1023;
+        println!("{:08b}", row_rev);
     }
-    // find_bitscan_magic();
-    // generate_db();
-    // let board = Board::starting_position();
-    // println!("{}", board);
-    //
-    // println!("{:b}", wrong(0b100, 2).0);
+}
+
+
+fn main() {
+    // for i in 0..64 {
+    //     println!("0x{:016x},", generate_bishop_occupancy_mask(i));
+    // }
+    // let pos = encode_pos("D4");
+    // let mask = generate_bishop_occupancy_mask(pos);
+    // print_mask(mask);
 }

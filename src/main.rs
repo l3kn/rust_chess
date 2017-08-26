@@ -1,5 +1,8 @@
 use std::fmt;
 
+mod bitscan;
+use bitscan::*;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Type {
     King,
@@ -135,6 +138,13 @@ impl fmt::Display for Board {
 }
 
 fn main() {
-    let board = Board::starting_position();
-    println!("{}", board);
+    for i in 0..64 {
+        println!("{}", bitscan(1 << i));
+    }
+    // find_bitscan_magic();
+    // generate_db();
+    // let board = Board::starting_position();
+    // println!("{}", board);
+    //
+    // println!("{:b}", wrong(0b100, 2).0);
 }

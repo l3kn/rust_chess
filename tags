@@ -1,0 +1,41 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Board	src/main.rs	/^impl Board {$/;"	i
+Board	src/main.rs	/^struct Board {$/;"	s
+Color	src/main.rs	/^enum Color {$/;"	g
+Piece	src/main.rs	/^impl Piece {$/;"	i
+Piece	src/main.rs	/^struct Piece(Type, Color);$/;"	s
+Type	src/main.rs	/^enum Type {$/;"	g
+bishop	src/occupancy_masks.rs	/^const bishop: [u64; 64] = [$/;"	c
+bitscan	src/bitscan.rs	/^pub fn bitscan(i: u64) -> u64 {$/;"	f
+bitscan	src/main.rs	/^mod bitscan;$/;"	m
+bitscan_db	src/bitscan.rs	/^const bitscan_db: [u64; 64] = [$/;"	c
+bitscan_magic	src/bitscan.rs	/^const bitscan_magic: u64 = 0x7edd5e59a4e28c2;$/;"	c
+bitscan_test	src/bitscan.rs	/^fn bitscan_test() {$/;"	f
+decode_square	src/helper.rs	/^pub fn decode_square(square: u64) -> (u64, u64) {$/;"	f
+empty	src/main.rs	/^    fn empty() -> Board {$/;"	f
+encode_pos	src/helper.rs	/^pub fn encode_pos(pos: &str) -> u64 {$/;"	f
+find_bitscan_magic	src/gen_bitscan.rs	/^pub fn find_bitscan_magic() {$/;"	f
+fmt	src/main.rs	/^    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {$/;"	f
+fmt::Display for Board	src/main.rs	/^impl fmt::Display for Board {$/;"	i
+fmt::Display for Piece	src/main.rs	/^impl fmt::Display for Piece {$/;"	i
+from_fen	src/main.rs	/^    fn from_fen(fen: &str) -> Board {$/;"	f
+from_fen	src/main.rs	/^    fn from_fen(fen: char) -> Piece {$/;"	f
+generate_bishop_occupancy_mask	src/occupancy_masks.rs	/^fn generate_bishop_occupancy_mask(square: u64) -> u64 {$/;"	f
+generate_db	src/gen_bitscan.rs	/^pub fn generate_db(bitscan_magic: u64) {$/;"	f
+generate_rook_occupancy_mask	src/occupancy_masks.rs	/^fn generate_rook_occupancy_mask(square: u64) -> u64 {$/;"	f
+get	src/main.rs	/^    fn get(&self, row: usize, col: usize) -> &Option<Piece> {$/;"	f
+hash	src/gen_bitscan.rs	/^fn hash(a: u64, b: u64, s: u64) -> u64 {$/;"	f
+helper	src/main.rs	/^mod helper;$/;"	m
+main	src/main.rs	/^fn main() {$/;"	f
+occupancy_masks	src/main.rs	/^mod occupancy_masks;$/;"	m
+print_mask	src/main.rs	/^fn print_mask(mask: u64) {$/;"	f
+rook	src/occupancy_masks.rs	/^const rook: [u64; 64] = [$/;"	c
+set	src/main.rs	/^    fn set(&mut self, row: usize, col: usize, piece: Option<Piece>) {$/;"	f
+starting_position	src/main.rs	/^    fn starting_position() -> Board {$/;"	f
+wrong	src/gen_bitscan.rs	/^fn wrong(magic : u64, pointer : u64) -> (u64, u64) {$/;"	f
+wrong_test	src/gen_bitscan.rs	/^fn wrong_test() {$/;"	f

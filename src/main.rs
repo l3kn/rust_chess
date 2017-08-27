@@ -6,6 +6,7 @@ use bitscan::*;
 
 mod helper;
 mod occupancy_masks;
+mod movegen;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Type {
@@ -22,6 +23,7 @@ enum Color {
     Black,
     White,
 }
+
 
 use Color::*;
 use Type::*;
@@ -73,11 +75,11 @@ struct Board {
 }
 
 impl Board {
-    fn empty() -> Board {
+    pub fn empty() -> Board {
         Board { pieces: [None; 64] }
     }
 
-    fn from_fen(fen: &str) -> Board {
+    pub fn from_fen(fen: &str) -> Board {
         let mut board = Board::empty();
         let mut row: usize = 0;
         let mut col: usize = 0;
@@ -104,17 +106,27 @@ impl Board {
         board
     }
 
-    fn starting_position() -> Board {
+    pub fn starting_position() -> Board {
         let fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1)";
         Self::from_fen(fen)
     }
 
-    fn get(&self, row: usize, col: usize) -> &Option<Piece> {
+    pub fn get(&self, row: usize, col: usize) -> &Option<Piece> {
         self.pieces.get(row * 8 + col).unwrap()
     }
 
-    fn set(&mut self, row: usize, col: usize, piece: Option<Piece>) {
+    pub fn set(&mut self, row: usize, col: usize, piece: Option<Piece>) {
         self.pieces[row * 8 + col] = piece;
+    }
+
+    pub fn occupancy(&self) -> u64 {
+        let mut mask = 0_u64;
+        for i in 0..64 {
+            if self.pieces[i].is_some() {
+                mask |= (1 << i);
+            }
+        }
+        mask
     }
 }
 
@@ -155,6 +167,12 @@ fn print_mask(mask: u64) {
 
 
 fn main() {
+    let board = Board::starting_position();
+    let occ = board.occupancy();
+    print_mask(occ);
+
+    let moves = movegen::generate_queen_moves(helper::encode_pos("D4"), occ);
+    print_mask(moves);
     // for i in 0..64 {
     //     println!("0x{:016x},", generate_bishop_occupancy_mask(i));
     // }

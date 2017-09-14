@@ -170,8 +170,9 @@ fn main() {
     let board = Board::starting_position();
     let occ = board.occupancy();
     print_mask(occ);
+    print!("======");
 
-    let moves = movegen::generate_queen_moves(helper::encode_pos("D4"), occ);
+    let moves = movegen::generate_pawn_moves_white(helper::encode_pos("E2"), occ, 0);
     print_mask(moves);
     // for i in 0..64 {
     //     println!("0x{:016x},", generate_bishop_occupancy_mask(i));

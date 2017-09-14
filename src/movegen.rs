@@ -1,5 +1,5 @@
 use occupancy_masks;
-use helper::{decode_square, encode_square};
+use helper::*;
 
 // NOTE: This generates pseudo-legal moves, too
 pub fn generate_rook_moves(square: u64, occupancy: u64) -> u64 {
@@ -135,35 +135,105 @@ pub fn generate_queen_moves(square: u64, occupancy: u64) -> u64 {
     rook | bishop
 }
 
-// TODO: A move must encode from, to, attack?, promotion_to
-// TODO: Handle promotion
-// TODO: Handle en-passant
-// TODO: Pawns beat on diagonal
-//
 // FIDE rules:
 // 3.7e. When a pawn reaches the rank furthest from its starting position it __must be exchanged__ as
 //   part of the same move on the same square for a new queen, rook, bishop or knight of the same
 //   colour. The player’s choice is __not restricted to pieces that have been captured previously__.
 //   This exchange of a pawn for another piece is called ‘promotion’ and the effect of the new
 //   piece is immediate.
-pub fn generate_pawn_moves_white(square: u64, occupancy: u64) -> u64 {
+pub fn generate_pawn_moves_white(square: u64, occupancy: u64, en_passant_square: u64) -> u64 {
     let mut moves = 0_u64;
     let (row, col) = decode_square(square);
 
-    match row {
-        0 => panic!("A white pawn can never be on rank 1 because it can't move back"),
-        1 => {
-            // If a white pawn is on rank 2, it can move one or two squares
-        },
-        2...5 {
-            // If a white pawn is on rank 3 to 6, it can move one square
-        },
-        6 => {
-            // TODO: Handle promotion
+    // Non-capture moves
+    if position_free(occupancy, row + 1, col) {
+        moves |= position_mask(row + 1, col);
+
+        if row == 1 && position_free(occupancy, row + 2, col) {
+            moves |= position_mask(row + 2, col);
         }
-        7 => panic!("A white pawn can never be on rank 7 because it has to promote")
+    }
+
+    // Captures
+    if position_valid(row + 1, col + 1) {
+        let mask = position_mask(row + 1, col + 1);
+        if position_occupied(occupancy, row + 1, col + 1) || mask == en_passant_square {
+            moves |= mask;
+        }
+    }
+
+    if position_valid(row + 1, col - 1) {
+        let mask = position_mask(row + 1, col - 1);
+        if  position_occupied(occupancy, row + 1, col - 1) || mask == en_passant_square {
+            moves |= mask;
+        }
     }
 
     moves
 }
 
+pub fn generate_pawn_moves_black(square: u64, occupancy: u64, en_passant_square: u64) -> u64 {
+    let mut moves = 0_u64;
+    let (row, col) = decode_square(square);
+
+    // Non-capture moves
+    if position_free(occupancy, row - 1, col) {
+        moves |= position_mask(row - 1, col);
+
+        if row == 6 && position_free(occupancy, row - 2, col) {
+            moves |= position_mask(row - 2, col);
+        }
+    }
+
+    // Captures
+    if position_valid(row - 1, col + 1) {
+        let mask = position_mask(row - 1, col + 1);
+        if position_occupied(occupancy, row - 1, col + 1) || mask == en_passant_square {
+            moves |= mask;
+        }
+    }
+
+    if position_valid(row - 1, col - 1) {
+        let mask = position_mask(row - 1, col - 1);
+        if  position_occupied(occupancy, row - 1, col - 1) || mask == en_passant_square {
+            moves |= mask;
+        }
+    }
+
+    moves
+}
+
+pub fn generate_knight_moves(square: u64, occupancy: u64) -> u64 {
+    let mut moves: u64 = 0;
+    let (row, col) = decode_square(square);
+
+    moves |= position_mask(row + 2, col + 1);
+    moves |= position_mask(row + 2, col - 1);
+    moves |= position_mask(row - 2, col + 1);
+    moves |= position_mask(row - 2, col - 1);
+
+    moves |= position_mask(row + 1, col + 2);
+    moves |= position_mask(row + 1, col - 2);
+    moves |= position_mask(row - 1, col + 2);
+    moves |= position_mask(row - 1, col - 2);
+
+    moves
+}
+
+// TODO: Handle castling
+pub fn generate_king_moves(square: u64, occupancy: u64) -> u64 {
+    let mut moves: u64 = 0;
+    let (row, col) = decode_square(square);
+
+    moves |= position_mask(row + 1, col);
+    moves |= position_mask(row - 1, col);
+    moves |= position_mask(row, col + 1);
+    moves |= position_mask(row, col - 1);
+
+    moves |= position_mask(row + 1, col + 1);
+    moves |= position_mask(row + 1, col - 1);
+    moves |= position_mask(row - 1, col + 1);
+    moves |= position_mask(row - 1, col - 1);
+
+    moves
+}
